@@ -1,5 +1,5 @@
 export default class UserModel {
-  private destinationFloor: number
+  readonly destinationFloor: number
 
   constructor (dest: number) {
     this.destinationFloor = dest

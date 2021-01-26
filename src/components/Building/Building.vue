@@ -62,10 +62,8 @@ export default class Building extends Vue {
       this.currentFloor.usersWaiting = []
     }
 
-    console.log('size = ', this.elevator.usersInElevator.length)
     // Move users arrived at destination
     for (const u of this.elevator.usersInElevator) {
-      console.log('Traitement d un user')
       if (u.destinationFloor === this.elevator.position) {
         this.currentFloor.usersArrived.push(u)
         this.elevator.userLeaveElevator(u)

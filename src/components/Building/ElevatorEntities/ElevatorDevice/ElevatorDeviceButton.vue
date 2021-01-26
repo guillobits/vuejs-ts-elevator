@@ -12,8 +12,8 @@ import ElevatorDeviceButtonModel from '@/models/ElevatorDeviceButton.model'
 
 @Component
 export default class ElevatorDeviceButton extends Vue {
-  @Prop() public floor!: FloorModel;
-  @Prop({ required: true }) public button: ElevatorDeviceButtonModel;
+  @Prop({ required: true }) public floor!: FloorModel;
+  @Prop({ required: true }) public button!: ElevatorDeviceButtonModel;
 
   btnPressed (): void {
     const user = new UserModel(this.button.floor)
