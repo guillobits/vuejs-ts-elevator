@@ -1,6 +1,6 @@
 <template>
   <div class="elevator-device-button">
-    <button @click="btnPressed">{{button.floor}}</button>
+    <button @click="btnPressed" :disabled="disabled">{{button.floor}}</button>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ import ElevatorDeviceButtonModel from '@/models/ElevatorDeviceButton.model'
 export default class ElevatorDeviceButton extends Vue {
   @Prop({ required: true }) public floor!: FloorModel;
   @Prop({ required: true }) public button!: ElevatorDeviceButtonModel;
+  @Prop() private disabled!: boolean;
 
   btnPressed (): void {
     const user = new UserModel(this.button.floor)

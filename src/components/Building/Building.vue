@@ -48,18 +48,29 @@ export default class Building extends Vue {
   }
 
   actionLoop (loop = 0) {
+    let destination
+    let way = 0
+
     this.ran = true
     if (this.elevator.usersInElevator.length <= 0) {
-      this.goToClosetFloorWithUser()
+      destination = this.goToClosetFloorWithUser()
     } else {
-      this.goToFirstUserDestination()
+      destination = this.goToFirstUserDestination()
     }
+    if (destination !== null && destination !== this.elevator.position) {
+      way = (this.elevator.position < destination) ? 1 : -1
+    }
+
     // Move all users in current floor to elevator if exists
     if (this.currentFloor.usersWaiting.length) {
-      this.currentFloor.usersWaiting.forEach(u => {
-        this.elevator.userEnterInElevator(u)
+      this.currentFloor.usersWaiting = this.currentFloor.usersWaiting.filter((u) => {
+        const userWay = (u.destinationFloor > this.currentFloor.position) ? 1 : -1
+        if (way === 0 || way === userWay) {
+          this.elevator.userEnterInElevator(u)
+          return false
+        }
+        return true
       })
-      this.currentFloor.usersWaiting = []
     }
 
     // Move users arrived at destination
@@ -74,25 +85,27 @@ export default class Building extends Vue {
     }, 1000)
   }
 
-  goToClosetFloorWithUser (): void {
-    const direction = this.closestUserPositionFromElevator()
-    if (direction !== null) {
-      if (direction > this.elevator.position) {
+  goToClosetFloorWithUser (): number | null {
+    const destination = this.closestUserPositionFromElevator()
+    if (destination !== null) {
+      if (destination > this.elevator.position) {
         this.elevator.up()
-      } else if (direction < this.elevator.position) {
+      } else if (destination < this.elevator.position) {
         this.elevator.down()
       }
     }
+    return destination
   }
 
-  goToFirstUserDestination (): void {
+  goToFirstUserDestination (): number | null {
     // In case user inside the elevator
-    const direction = this.elevator.usersInElevator[0].destinationFloor
-    if (direction > this.elevator.position) {
+    const destination = this.elevator.usersInElevator[0].destinationFloor
+    if (destination > this.elevator.position) {
       this.elevator.up()
-    } else if (direction < this.elevator.position) {
+    } else if (destination < this.elevator.position) {
       this.elevator.down()
     }
+    return destination
   }
 
   closestUserPositionFromElevator (): number | null {

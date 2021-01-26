@@ -5,6 +5,7 @@
       v-for="(b, idx) in elevatorDevice.buttons"
       :key="idx"
       :floor="floor"
+      :disabled="floor.position === b.floor"
     />
   </div>
 </template>
